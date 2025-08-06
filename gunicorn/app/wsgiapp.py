@@ -10,6 +10,18 @@ from gunicorn import util
 
 
 class WSGIApplication(Application):
+
+    def __init__(self, usage=None, prog=None):
+        # subclasses may not have __init__, and if they do, they 
+        # may not call init(), so self.app_uri may not be present.
+        # if so, BaseApplication.__init__() will call do_load_config(),
+        # which expects to be able to access app_uri.  Instantiate it 
+        # here on their behalf.  Note that it must be done before
+        # super().__init__(), since that ends up in BaseApplication.__init__(
+        # as well.
+        self.app_uri = None
+        super().__init__(usage, prog)
+
     def init(self, parser, opts, args):
         self.app_uri = None
 

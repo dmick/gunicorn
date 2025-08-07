@@ -18,6 +18,15 @@ class BaseApplication:
     An application interface for configuring and loading
     the various necessities for any given web framework.
     """
+
+    # Applications that subclass one of the Application classes
+    # may not have app_uri or wsgi_app set (because they don't
+    # need to).  But __init__() below calls do_load_config() which
+    # expects to find app_uri.  Default it here on their behalf.
+    # Maybe there's a better way but I need to get chacra working.
+
+    app_uri = "dummy"
+
     def __init__(self, usage=None, prog=None):
         self.usage = usage
         self.cfg = None
